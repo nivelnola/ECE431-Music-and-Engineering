@@ -22,7 +22,7 @@ function [soundOut] = create_scale( scaleType,temperament, root, constants )
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Constants
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TODO: Add all relavant constants 
+% TODO: Add all relevant constants 
 
 switch scaleType
     case {'Major','major','M','Maj','maj'}
