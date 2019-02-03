@@ -24,6 +24,22 @@ constants.fs=44100;                 % Sampling rate in samples per second
 constants.durationScale=0.5;        % Duration of notes in a scale
 constants.durationChord=3;          % Duration of chords
 
+constants.equalHalfTone = 2^(1/12);     % 100 cents equivalent on a Hertz scale
+constants.equalScale = constants.equalHalfTone .^ (0:12)';
+% Written explicitly:
+%     1.0000    Root
+%     1.0595    Semitone (Minor second)
+%     1.1225    Whole tone (Major second)
+%     1.1892    Minor third
+%     1.2599    Major third
+%     1.3348    Perfect fourth
+%     1.4142    Augmented fourth (Diminished Fifth)
+%     1.4983    Perfect fifth
+%     1.5874    Minor sixth
+%     1.6818    Major sixth
+%     1.7818    Minor seventh
+%     1.8877    Major seventh
+%     2.0000    Octave
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
