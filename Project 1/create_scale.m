@@ -22,32 +22,65 @@ function [soundOut] = create_scale( scaleType,temperament, root, constants )
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Constants
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TODO: Add all relevant constants 
-
-switch scaleType
-    case {'Major','major','M','Maj','maj'}
-        scaleID = [1 0 1 0 1 1 0 1 0 1 0 1 1];
-        % TODO: Complete with interval pattern for the major scale
-    case {'Minor','minor','m','Min','min'}
-        scaleID = [1 0 1 1 0 1 0 1 1 0 1 0 1];
-        % TODO: Complete with interval pattern for the minor scale
-    case {'Harmonic', 'harmonic', 'Harm', 'harm'}
-        scaleID = [1 0 1 1 0 1 0 1 1 0 0 1 1];
-    case {'Melodic', 'melodic', 'Mel', 'mel'}
-        scaleID = [1 0 1 1 0 1 0 1 0 1 0 1 1];
-    otherwise
-        error('Improper scale specified');
-end
+root_freq = note2freq(root, temperament);
 
 switch temperament
     case {'just','Just'}
-	% TODO: Pull the Just tempered ratios based on the pattern from the scales
+        switch scaleType
+            case {'Major','major','M','Maj','maj'}
+                scaleID = [1 0 0 1 0 1 1 0 0 1 0 1 0 0 0 1 1];
+            case {'Minor','minor','m','Min','min'}
+                scaleID = [1 0 0 1 1 0 1 0 0 1 1 0 0 0 1 0 1]; 
+            case {'Harmonic', 'harmonic', 'Harm', 'harm'}
+                scaleID = [1 0 0 1 1 0 1 0 0 1 1 0 0 0 0 1 1];
+            case {'Melodic', 'melodic', 'Mel', 'mel'}
+                scaleID = [1 0 0 1 1 0 1 0 0 1 0 1 0 0 0 1 1];
+            otherwise
+                error('Improper scale specified.');
+        end
+        
+        frontFreqs = constants.justScale .* scaleID * root_freq;
+        frontFreqs = frontFreqs(frontFreqs ~= 0);
+        
+        switch scaleType
+            case {'Melodic', 'melodic', 'Mel', 'mel'}
+                backFreqs = constants.justScale .* [1 0 0 1 1 0 1 0 0 1 1 0 0 0 1 0 1] * root_freq;
+                backFreqs = backFreqs(backFreqs ~= 0);
+                backFreqs = fliplr(backFreqs(1:end-1));
+            otherwise
+                backFreqs = fliplr(frontFreqs(1:end-1));
+        end
+        
+        outputFreqs = [frontFreqs backFreqs];
+        
     case {'equal','Equal'}
-	% TODO: Pull the equal tempered ratios based on the pattern from the scales
-    otherwise
-        error('Improper temperament specified')
+        switch scaleType
+            case {'Major','major','M','Maj','maj'}
+                scaleID = [1 0 1 0 1 1 0 1 0 1 0 1 1];
+            case {'Minor','minor','m','Min','min'}
+                scaleID = [1 0 1 1 0 1 0 1 1 0 1 0 1]; 
+            case {'Harmonic', 'harmonic', 'Harm', 'harm'}
+                scaleID = [1 0 1 1 0 1 0 1 1 0 0 1 1];
+            case {'Melodic', 'melodic', 'Mel', 'mel'}
+                scaleID = [1 0 1 1 0 1 0 1 0 1 0 1 1];
+            otherwise
+                error('Improper scale specified.');
+        end
+        
+        frontFreqs = constants.equalScale .* scaleID * root_freq;
+        frontFreqs = frontFreqs(frontFreqs ~= 0);
+        
+        switch scaleType
+            case {'Melodic', 'melodic', 'Mel', 'mel'}
+                backFreqs = constants.equalScale .* [1 0 1 1 0 1 0 1 1 0 1 0 1] * root_freq;
+                backFreqs = backFreqs(backFreqs ~= 0);
+                backFreqs = fliplr(backFreqs(1:end-1));
+            otherwise
+                backFreqs = fliplr(frontFreqs(1:end-1));
+        end
+        
+        outputFreqs = [frontFreqs backFreqs];
 end
-
 
 % Create the vector based on the notes
 

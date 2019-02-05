@@ -1,15 +1,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% SCRIPT
-%    hw1
-% 
-% This script runs questions 2 through 4 of the HW1 from ECE313:Music and
-% Engineering.
-%
-% This script was adapted from hw1 recevied in 2012
+% ECE-413: Music & Engineering
+% Homework 1
+% Alon S. Levin
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Setup
+%% Setup
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all
 clear functions
@@ -18,12 +14,11 @@ dbstop if error
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Constants
+%% Constants
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 constants.fs=44100;                 % Sampling rate in samples per second
 constants.durationScale=0.5;        % Duration of notes in a scale
 constants.durationChord=3;          % Duration of chords
-constants.amplitude = 10;           % Amplitude of the sound
 
 constants.equalHalfTone = 2^(1/12);     % 100 cents equivalent on a Hertz scale
 constants.equalScale = constants.equalHalfTone .^ (0:12);
@@ -42,9 +37,27 @@ constants.equalScale = constants.equalHalfTone .^ (0:12);
 %     1.8877    Major seventh
 %     2.0000    Octave
 
+constants.justScale = [ ...
+    1 ...       % Unison
+    16/15 ...   % Semitone
+    10/9 ...    % Minor tone
+    9/8 ...     % Major tone
+    6/5 ...     % Minor third
+    5/4 ...     % Major third
+    4/3 ...     % Perfect fourth
+    45/32 ...   % Augmented fourth
+    64/45 ...   % Diminished fifth
+    3/2 ...     % Perfect fifth
+    8/5 ...     % Minor sixth
+    5/3 ...     % Major sixth
+    7/4 ...     % Harmonic minor seventh
+    16/9 ...    % Grave minor seventh
+    9/5 ...     % Minor seventh
+    15/8 ...    % Major seventh
+    2];         % Octave
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Question 2 - scales
+%% Question 2 - scales
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [soundMajorScaleJust]=create_scale('Major','Just','A',constants);
 [soundMajorScaleEqual]=create_scale('Major','Equal','A',constants);
@@ -78,7 +91,7 @@ soundsc(soundMelScaleEqual,constants.fs);
 fprintf('\n');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Question 3 - chords
+%% Question 3 - chords
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fund = 'A'; % need this to determine wavelength for plots
 
@@ -133,7 +146,7 @@ disp('Playing the Equal Tempered Min7 Chord');
 soundsc(soundMin7ChordEqual,constants.fs);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Question 4 - plots
+%% Question 4 - plots
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % determine fundamental frequency
 
