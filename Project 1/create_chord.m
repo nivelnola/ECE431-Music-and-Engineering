@@ -48,7 +48,7 @@ switch temperament
         end
         
         outputFreqs = constants.equalScale .* chordID * root_freq;
-        outputFreqs = outputFreqs(outputFreqs ~= 0);
+        outputFreqs = outputFreqs(outputFreqs ~= 0)';
         
     case {'just','Just'}
         switch chordType
@@ -71,7 +71,7 @@ switch temperament
         end
         
         outputFreqs = constants.justScale .* chordID * root_freq;
-        outputFreqs = outputFreqs(outputFreqs ~= 0);
+        outputFreqs = outputFreqs(outputFreqs ~= 0)';
     
     otherwise
         error('Improper temperament specified.')
@@ -79,6 +79,6 @@ end
 
 %% Creating the Output Sound Vector
 times = 0:1/constants.fs:constants.durationChord;
-soundOut = sum(sin(2*pi*(outputFreqs.' * times)));
+soundOut = sum(sin(2*pi*(outputFreqs * times)));
 
 end

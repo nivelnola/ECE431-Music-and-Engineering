@@ -18,11 +18,11 @@ function [soundOut] = create_scale( scaleType,temperament, root, constants )
 %   constants = the constants structure
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Constants
+%% Creating the Scales
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-root_freq = note2freq(root, temperament);
+%root_freq = note2freq(root, temperament);
+root_freq = root;
 
 switch temperament
     case {'just','Just'}
@@ -51,7 +51,7 @@ switch temperament
                 backFreqs = fliplr(frontFreqs(1:end-1));
         end
         
-        outputFreqs = [frontFreqs backFreqs];
+        outputFreqs = [frontFreqs backFreqs]';
         
     case {'equal','Equal'}
         switch scaleType
@@ -79,9 +79,11 @@ switch temperament
                 backFreqs = fliplr(frontFreqs(1:end-1));
         end
         
-        outputFreqs = [frontFreqs backFreqs];
+        outputFreqs = [frontFreqs backFreqs]';
 end
 
-% Create the vector based on the notes
-
+%% Creating the Output Sound Vector
+times = 0:1/constants.fs:constants.durationScale;
+soundOut = sin(2*pi*(outputFreqs * times));
+soundOut = reshape(soundOut', 1, []);
 end
