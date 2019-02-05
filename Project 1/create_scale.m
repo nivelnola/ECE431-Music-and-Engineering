@@ -26,15 +26,17 @@ function [soundOut] = create_scale( scaleType,temperament, root, constants )
 
 switch scaleType
     case {'Major','major','M','Maj','maj'}
-	% TODO: Complete with interval pattern for the major scale
+        scaleID = [1 0 1 0 1 1 0 1 0 1 0 1 1];
+        % TODO: Complete with interval pattern for the major scale
     case {'Minor','minor','m','Min','min'}
-	% TODO: Complete with interval pattern for the minor scale
+        scaleID = [1 0 1 1 0 1 0 1 1 0 1 0 1];
+        % TODO: Complete with interval pattern for the minor scale
     case {'Harmonic', 'harmonic', 'Harm', 'harm'}
-	% EXTRA CREDIT
+        scaleID = [1 0 1 1 0 1 0 1 1 0 0 1 1];
     case {'Melodic', 'melodic', 'Mel', 'mel'}
-	% EXTRA CREDIT
+        scaleID = [1 0 1 1 0 1 0 1 0 1 0 1 1];
     otherwise
-        error('Inproper scale specified');
+        error('Improper scale specified');
 end
 
 switch temperament

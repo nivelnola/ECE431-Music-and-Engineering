@@ -23,9 +23,10 @@ dbstop if error
 constants.fs=44100;                 % Sampling rate in samples per second
 constants.durationScale=0.5;        % Duration of notes in a scale
 constants.durationChord=3;          % Duration of chords
+constants.amplitude = 10;           % Amplitude of the sound
 
 constants.equalHalfTone = 2^(1/12);     % 100 cents equivalent on a Hertz scale
-constants.equalScale = constants.equalHalfTone .^ (0:12)';
+constants.equalScale = constants.equalHalfTone .^ (0:12);
 % Written explicitly:
 %     1.0000    Root
 %     1.0595    Semitone (Minor second)

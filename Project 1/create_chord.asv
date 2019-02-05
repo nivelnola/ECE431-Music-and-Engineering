@@ -47,7 +47,6 @@ switch temperament
         end
         
         outputFreqs = constants.equalScale .* chordID * root_freq;
-        outputFreqs = outputFreqs(outputFreqs ~= 0);
         
     case {'just','Just'}
         switch chordType
@@ -64,8 +63,6 @@ switch temperament
     otherwise
         error('Inproper temperament specified')
 end
-
-% Create output vector
 
 
 
