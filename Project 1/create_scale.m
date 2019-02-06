@@ -21,8 +21,7 @@ function [soundOut] = create_scale( scaleType,temperament, root, constants )
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Creating the Scales
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%root_freq = note2freq(root, temperament);
-root_freq = root;
+root_freq = note2freq(root);
 
 switch temperament
     case {'just','Just'}
@@ -36,7 +35,7 @@ switch temperament
             case {'Melodic', 'melodic', 'Mel', 'mel'}
                 scaleID = [1 0 0 1 1 0 1 0 0 1 0 1 0 0 0 1 1];
             otherwise
-                error('Improper scale specified.');
+                error('Improper scale specified: %s', scaleType);
         end
         
         frontFreqs = constants.justScale .* scaleID * root_freq;
@@ -64,7 +63,7 @@ switch temperament
             case {'Melodic', 'melodic', 'Mel', 'mel'}
                 scaleID = [1 0 1 1 0 1 0 1 0 1 0 1 1];
             otherwise
-                error('Improper scale specified.');
+                error('Improper scale specified: %s', scaleType);
         end
         
         frontFreqs = constants.equalScale .* scaleID * root_freq;
@@ -80,6 +79,9 @@ switch temperament
         end
         
         outputFreqs = [frontFreqs backFreqs]';
+
+    otherwise
+        error('Improper temperament specified: %s', temperament)
 end
 
 %% Creating the Output Sound Vector

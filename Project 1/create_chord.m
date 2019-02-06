@@ -23,8 +23,7 @@ function [soundOut] = create_chord( chordType,temperament, root, constants )
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Creating the Chords
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%root_freq = note2freq(root, temperament);
-root_freq = root;
+root_freq = note2freq(root);
 
 switch temperament
     case {'equal','Equal'}
@@ -44,7 +43,7 @@ switch temperament
             case {'Min7','min7','Minor7', 'm7'}
                 chordID = [1 0 0 1 0 0 0 1 0 0 1 0 0];  % Root, minor third, perfect fifth, minor seventh
             otherwise
-                error('Improper chord specified.');
+                error('Improper chord specified: %s', chordType);
         end
         
         outputFreqs = constants.equalScale .* chordID * root_freq;
@@ -67,14 +66,14 @@ switch temperament
             case {'Min7','min7','Minor7', 'm7'}
                 chordID = [1 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0];  % Root, minor third, perfect fifth, minor seventh
             otherwise
-                error('Improper chord specified.');
+                error('Improper chord specified: %s', chordType);
         end
         
         outputFreqs = constants.justScale .* chordID * root_freq;
         outputFreqs = outputFreqs(outputFreqs ~= 0)';
     
     otherwise
-        error('Improper temperament specified.')
+        error('Improper temperament specified: %s', temperament)
 end
 
 %% Creating the Output Sound Vector

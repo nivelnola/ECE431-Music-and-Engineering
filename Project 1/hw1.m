@@ -101,7 +101,7 @@ fprintf('\n');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Question 3 - chords
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-fund = 440; % need this to determine wavelength for plots
+fund = 'A';
 
 % major and minor chords
 [soundMajorChordJust]=create_chord('Major','Just',fund,constants);
