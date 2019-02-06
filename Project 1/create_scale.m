@@ -86,4 +86,5 @@ end
 times = 0:1/constants.fs:constants.durationScale;
 soundOut = sin(2*pi*(outputFreqs * times));
 soundOut = reshape(soundOut', 1, []);
+
 end

@@ -79,6 +79,6 @@ end
 
 %% Creating the Output Sound Vector
 times = 0:1/constants.fs:constants.durationChord;
-soundOut = 0.05*sum(sin(2*pi*(outputFreqs * times)));   % Changed amplitude, because at higher amplitudes audioplayer stops outputting well
+soundOut = 0.05*sum(sin(2*pi*(outputFreqs * times)));   % Changed amplitude, because at higher amplitudes audioplayer stops o
 
 end

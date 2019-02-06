@@ -65,13 +65,17 @@ constants.justScale = [ ...
 [soundMinorScaleEqual]=create_scale('Minor','Equal','A',constants);
 
 disp('Playing the Just Tempered Major Scale');
-soundsc(soundMajorScaleJust,constants.fs);
+player = audioplayer(soundMajorScaleJust,constants.fs);
+playblocking(player);
 disp('Playing the Equal Tempered Major Scale');
-soundsc(soundMajorScaleEqual,constants.fs);
+player = audioplayer(soundMajorScaleEqual,constants.fs);
+playblocking(player);
 disp('Playing the Just Tempered Minor Scale');
-soundsc(soundMinorScaleJust,constants.fs);
+player = audioplayer(soundMinorScaleJust,constants.fs);
+playblocking(player);
 disp('Playing the Equal Tempered Minor Scale');
-soundsc(soundMinorScaleEqual,constants.fs);
+player = audioplayer(soundMinorScaleEqual,constants.fs);
+playblocking(player);
 fprintf('\n');
 
 % EXTRA CREDIT - Melodic and Harmonic scales
@@ -81,19 +85,23 @@ fprintf('\n');
 [soundMelScaleEqual]=create_scale('Melodic','Equal','A',constants);
 
 disp('Playing the Just Tempered Harmonic Scale');
-soundsc(soundHarmScaleJust,constants.fs);
+player = audioplayer(soundHarmScaleJust,constants.fs);
+playblocking(player);
 disp('Playing the Equal Tempered Harmonic Scale');
-soundsc(soundHarmScaleEqual,constants.fs);
+player = audioplayer(soundHarmScaleEqual,constants.fs);
+playblocking(player);
 disp('Playing the Just Tempered Melodic Scale');
-soundsc(soundMelScaleJust,constants.fs);
+player = audioplayer(soundMelScaleJust,constants.fs);
+playblocking(player);
 disp('Playing the Equal Tempered Melodic Scale');
-soundsc(soundMelScaleEqual,constants.fs);
+player = audioplayer(soundMelScaleEqual,constants.fs);
+playblocking(player);
 fprintf('\n');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Question 3 - chords
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-fund = 'A'; % need this to determine wavelength for plots
+fund = 440; % need this to determine wavelength for plots
 
 % major and minor chords
 [soundMajorChordJust]=create_chord('Major','Just',fund,constants);
@@ -102,13 +110,17 @@ fund = 'A'; % need this to determine wavelength for plots
 [soundMinorChordEqual]=create_chord('Minor','Equal',fund,constants);
 
 disp('Playing the Just Tempered Major Chord');
-soundsc(soundMajorChordJust,constants.fs);
+player = audioplayer(soundMajorChordJust,constants.fs);
+playblocking(player);
 disp('Playing the Equal Tempered Major Chord');
-soundsc(soundMajorChordEqual,constants.fs);
+player = audioplayer(soundMajorChordEqual,constants.fs);
+playblocking(player);
 disp('Playing the Just Tempered Minor Chord');
-soundsc(soundMinorChordJust,constants.fs);
+player = audioplayer(soundMinorChordJust,constants.fs);
+playblocking(player);
 disp('Playing the Equal Tempered Minor Chord');
-soundsc(soundMinorChordEqual,constants.fs);
+player = audioplayer(soundMinorChordEqual,constants.fs);
+playblocking(player);
 fprintf('\n');
 
 % assorted other chords
@@ -125,25 +137,35 @@ fprintf('\n');
 
 
 disp('Playing the Just Tempered Power Chord');
-soundsc(soundPowerChordJust,constants.fs);
+player = audioplayer(soundPowerChordJust,constants.fs);
+playblocking(player);
 disp('Playing the Equal Tempered Power Chord');
-soundsc(soundPowerChordEqual,constants.fs);
+player = audioplayer(soundPowerChordEqual,constants.fs);
+playblocking(player);
 disp('Playing the Just Tempered Sus2 Chord');
-soundsc(soundSus2ChordJust,constants.fs);
+player = audioplayer(soundSus2ChordJust,constants.fs);
+playblocking(player);
 disp('Playing the Equal Tempered Sus2 Chord');
-soundsc(soundSus2ChordEqual,constants.fs);
+player = audioplayer(soundSus2ChordEqual,constants.fs);
+playblocking(player);
 disp('Playing the Just Tempered Sus4 Chord');
-soundsc(soundSus2ChordJust,constants.fs);
+player = audioplayer(soundSus2ChordJust,constants.fs);
+playblocking(player);
 disp('Playing the Equal Tempered Sus4 Chord');
-soundsc(soundSus2ChordEqual,constants.fs);
+player = audioplayer(soundSus2ChordEqual,constants.fs);
+playblocking(player);
 disp('Playing the Just Tempered Dom7 Chord');
-soundsc(soundDom7ChordJust,constants.fs);
+player = audioplayer(soundDom7ChordJust,constants.fs);
+playblocking(player);
 disp('Playing the Equal Tempered Dom7 Chord');
-soundsc(soundDom7ChordEqual,constants.fs);
+player = audioplayer(soundDom7ChordEqual,constants.fs);
+playblocking(player);
 disp('Playing the Just Tempered Min7 Chord');
-soundsc(soundMin7ChordJust,constants.fs);
+player = audioplayer(soundMin7ChordJust,constants.fs);
+playblocking(player);
 disp('Playing the Equal Tempered Min7 Chord');
-soundsc(soundMin7ChordEqual,constants.fs);
+player = audioplayer(soundMin7ChordEqual,constants.fs);
+playblocking(player);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Question 4 - plots
