@@ -170,21 +170,52 @@ playblocking(player);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Question 4 - plots
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% determine fundamental frequency
+period = 1/note2freq(fund);
+wavelength = 0:1/constants.fs:period;
+wavelength10 = 0:1/constants.fs:10*period;
 
+figure('name', 'Major Chord Comparisons')
+subplot(2,1,1)
+hold on
+grid on
+plot(wavelength, soundMajorChordEqual(1:length(wavelength)));
+plot(wavelength, soundMajorChordJust(1:length(wavelength)));
+title('Major Chord, Single Wavelength')
+axis([0 period -0.4 0.4])
+xlabel('Time (sec)')
+ylabel('Amplitude')
+legend('Equally Tempered', 'Just Tempered')
 
-% Major chords
-%   Single Wavelength
-%     just tempered
-%     equal tempered
-%   Tens of Wavelengths
-%     just tempered
-%     equal tempered
+subplot(2,1,2)
+hold on
+grid on
+plot(wavelength10, soundMajorChordEqual(1:length(wavelength10)));
+plot(wavelength10, soundMajorChordJust(1:length(wavelength10)));
+title('Major Chord, Ten Wavelengths')
+axis([0 10*period -0.4 0.4])
+xlabel('Time (sec)')
+ylabel('Amplitude')
+legend('Equally Tempered', 'Just Tempered')
 
-% Minor chords
-%   Single Wavelength
-%     just tempered
-%     equal tempered
-%   Tens of Wavelengths
-%     just tempered
-%     equal tempered
+figure('name', 'Minor Chord Comparisons')
+subplot(2,1,1)
+hold on
+grid on
+plot(wavelength, soundMinorChordEqual(1:length(wavelength)));
+plot(wavelength, soundMinorChordJust(1:length(wavelength)));
+title('Minor Chord, Single Wavelength')
+axis([0 period -0.4 0.4])
+xlabel('Time (sec)')
+ylabel('Amplitude')
+legend('Equally Tempered', 'Just Tempered')
+
+subplot(2,1,2)
+hold on
+grid on
+plot(wavelength10, soundMinorChordEqual(1:length(wavelength10)));
+plot(wavelength10, soundMinorChordJust(1:length(wavelength10)));
+title('Minor Chord, Ten Wavelengths')
+axis([0 10*period -0.4 0.4])
+xlabel('Time (sec)')
+ylabel('Amplitude')
+legend('Equally Tempered', 'Just Tempered')
