@@ -77,6 +77,7 @@ switch temperament
 end
 
 %% Creating the Output Sound Vector
+disp(outputFreqs)
 times = 0:1/constants.fs:constants.durationChord;
 soundOut = .05*sum(sin(2*pi*(outputFreqs * times)));   % Changed amplitude, because at higher amplitudes audioplayer stops outputting well
 
