@@ -2,55 +2,61 @@ function soundVector = oscillator(AMP, FREQ, WF, PHASE, constants)
 %oscillator models an oscillator unit generator, taking in amplitude,
 %frequency, a waveform, and a phase offset as inputs.
 
-numPeriods = constants.durationScale*FREQ;
+%% Setup
+numPeriods = constants.durationChord*FREQ;
+PHASE = mod(PHASE, 2*pi);
 
-%interpolate = @(vector, bin) (bin-fix(bin))*vector(ceil(bin)) + (1-(bin-fix(bin)))*vector(floor(bin));
+% Interpolation function for a wraparound effect; i.e., the current bin is
+% between 0 and 1.
+interpWrap = @(vector, bin) bin*vector(1) + (1-bin)*vector(end);
 
-if isvector(WF) && ~(isstring(WF) || ischar(WF))
+%% Identify the waveform
+% Four waveforms were generated, with 1024 sample points.
+if (isstring(WF) || ischar(WF))
+    switch WF
+        case 'sine'
+            WF = constants.Waveforms(:,1)';
+        case "square"
+            WF = constants.Waveforms(:,2)';
+        case "sawtooth"
+            WF = constants.Waveforms(:,3)';
+        case "triangle"
+            WF = constants.Waveforms(:,4)';
+        otherwise
+            error("Improper waveform specified.")
+    end
+elseif isvector(WF)
+    % Normalize the custom waveform
     WF = WF/max(WF);
-    numBins = size(WF);
-    sampIncrement = numBins*FREQ/constants.fs;
-    startBin = (PHASE/(2*pi))*numBins;
-    
-    spot = 1;
-    for ticker = startBin:sampIncrement:(numBins+startBin)
-        readFrom = mod(ticker,numBins)+1;
-        %period(spot) = AMP*interpolate(WF', readFrom);
-        period = AMP*WF(ceil(readFrom));
-        spot = spot + 1;
-    end
-    
 else
-    numBins = size(constants.Waveforms,1);
-    sampIncrement = numBins*FREQ/constants.fs;
-    startBin = (PHASE/(2*pi))*numBins;
-    
-    spot = 1;
-    for ticker = startBin:sampIncrement:(numBins+startBin)
-        readFrom = mod(ticker+1,numBins);
-        %disp(spot);
-        %disp(ticker);
-        %disp(readFrom);
-        switch WF
-            case "sine"
-                %period(spot) = AMP*interpolate(constants.Waveforms(:,1), readFrom);
-                period(spot) = AMP*constants.Waveforms(ceil(readFrom),1);
-            case "square"
-                %period(spot) = AMP*interpolate(constants.Waveforms(:,2), readFrom);
-                period(spot) = AMP*constants.Waveforms(ceil(readFrom),2);
-            case "sawtooth"
-                %period(spot) = AMP*interpolate(constants.Waveforms(:,3), readFrom);
-                period(spot) = AMP*constants.Waveforms(ceil(readFrom),3);
-            case "triangle"
-                %period(spot) = AMP*interpolate(constants.Waveforms(:,4), readFrom);
-                period(spot) = AMP*constants.Waveforms(ceil(readFrom),4);
-            otherwise
-                error("Improper waveform specified.")
-        end
-        spot = spot + 1;
-    end
+    error("Improper waveform specified.")
 end
 
+%% Sample the waveform to generate a single period
+
+% Find the length of the wave table
+numBins = length(WF);
+
+% Find the sampling increment and the starting bin of the wave table
+sampIncrement = numBins*FREQ/constants.fs;
+startBin = mod((PHASE/(2*pi) * numBins) + 1, numBins);
+
+% Build a single period, at the given frequency
+spot = 1;
+for ticker = startBin:sampIncrement:(numBins+startBin)
+    % Find the location in the wave table
+    readFrom = mod(ticker+1,numBins);
+    % Interpolate the value based on the location
+    if readFrom < 1
+        period(spot) = AMP*interpWrap(WF, readFrom);
+    else
+        period(spot) = AMP*interp1(1:numBins, WF, readFrom);
+    end
+    % Increment
+    spot = spot + 1;
+end
+
+%% Repeat the period for the duration of the audio
 soundVector = [repmat(period, 1, floor(numPeriods)), period(1:floor(mod(numPeriods, floor(numPeriods))*length(WF)))];
-%soundVector = period;
+
 end
