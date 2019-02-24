@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% SCRIPT
-%    hw2
-%
+% ECE-413: Music & Engineering
+% Homework 2
+% Alon S. Levin
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -19,6 +19,8 @@ constants.durationScale=.5;             % Duration of notes in a scale
 constants.durationChord=4;              % Duration of chords
 STDOUT=1;                               % Define the standard output stream
 STDERR=2;                               % Define the standard error stream
+
+constants.Waveforms = importWaveTable();% Wave Table for 4 common waves
 
 notes{1}.note='C4';
 notes{1}.start=0;
@@ -44,7 +46,7 @@ instrument.mode = 'Major';
 synthTypes={'Additive','Subtractive','FM','Waveshaper'};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Questions 1--4 - samples
+%% Questions 1--4 - samples
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for cntSynth=1:length(synthTypes)
     instrument.sound=synthTypes{cntSynth};
