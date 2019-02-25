@@ -1,16 +1,16 @@
-function soundVector = oscillator(AMP, FREQ, WF, PHASE, constants)
+function soundVector = oscillator(WF, AMP, FREQ, PHASE, DUR, constants)
 %oscillator models an oscillator unit generator, taking in amplitude,
 %frequency, a waveform, and a phase offset as inputs.
 
 %% Setup
-numPeriods = constants.durationChord*FREQ;
+soundVector = zeros(1,DUR);
 PHASE = mod(PHASE, 2*pi);
 
 % Interpolation function for a wraparound effect; i.e., the current bin is
 % between 0 and 1.
 interpWrap = @(vector, bin) bin*vector(1) + (1-bin)*vector(end);
 
-%% Identify the waveform
+%% Identify the carrier waveform
 % Four waveforms were generated, with 1024 sample points.
 if (isstring(WF) || ischar(WF))
     switch WF
@@ -25,13 +25,35 @@ if (isstring(WF) || ischar(WF))
         otherwise
             error("Improper waveform specified.")
     end
-elseif isvector(WF)
-    % Normalize the custom waveform
-    WF = WF/max(WF);
+% elseif isvector(WF)
+%     % Normalize the custom waveform
+%     WF = WF/max(WF);
 else
     error("Improper waveform specified.")
 end
 
+%% Accounting for Modulation
+% Three possible parameters can be modulated:
+%   Amplitude
+%   Frequency
+%   Phase
+% However, we know that IF such a parameter is modulated, it will be a
+% result of a different oscillator unit.
+% Therefore, the parameter will already be configured to the sampling rate,
+% AND will be the same duration (and therefore vector length) as the
+% oscillator it is being fed to.
+% 
+% Amplitude:
+%   Scalar:     if readFrom < 1
+%                   period(spot) = AMP*interpWrap(WF, readFrom);
+%               else
+%                   period(spot) = AMP*interp1(1:numBins, WF, readFrom);
+%               end
+%   Vector:     if readFrom < 1
+%                   period(spot) = AMP(spot)*interpWrap(WF, readFrom);
+%               else
+%                   period(spot) = AMP(spot)*interp1(1:numBins, WF, readFrom);
+%               end
 %% Sample the waveform to generate a single period
 
 % Find the length of the wave table
@@ -48,15 +70,22 @@ for ticker = startBin:sampIncrement:(numBins+startBin)
     readFrom = mod(ticker+1,numBins);
     % Interpolate the value based on the location
     if readFrom < 1
-        period(spot) = AMP*interpWrap(WF, readFrom);
+        period(spot) = interpWrap(WF, readFrom);
     else
-        period(spot) = AMP*interp1(1:numBins, WF, readFrom);
+        period(spot) = interp1(WF, readFrom);
     end
     % Increment
     spot = spot + 1;
 end
 
 %% Repeat the period for the duration of the audio
-soundVector = [repmat(period, 1, floor(numPeriods)), period(1:floor(mod(numPeriods, floor(numPeriods))*length(WF)))];
+for ticker = 1:DUR
+    switch isscalar(AMP)
+        case 1             % AMP is a scalar
+            soundVector(ticker) = AMP*period(mod(ticker, length(period))+1);
+        case 0             % AMP is a vector
+            soundVector(ticker) = AMP(ticker)*period(mod(ticker, length(period))+1);
+    end
+end
 
 end
