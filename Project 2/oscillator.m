@@ -60,7 +60,8 @@ end
 %               for ticker = startBin:sampIncrement:(numBins+startBin)
 %   Vector:     sampIncrement = numBins*FREQ/constants.fs; <-- VECTOR w/ same length as soundOut
 %               ...
-
+%               Periodicity no longer works - need to iterate over the
+%               whole sound vector
 %% Sample the waveform to generate a single period
 
 % Find the length of the wave table
@@ -103,7 +104,7 @@ switch isscalar(FREQ)
         
         for soundTicker = 1:DUR
             % Find the location in the wave table
-            readFrom = mod(soundTicker+1,numBins);
+            readFrom = mod(tableTicker+1,numBins);
             % Interpolate the value based on the location
             if readFrom < 1
                 soundVector(soundTicker) = interpWrap(WF, readFrom);

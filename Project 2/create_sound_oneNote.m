@@ -57,7 +57,7 @@ elseif instrument.sound == "FM"
     fc = note2freq(noteStruct.note);
     fm = fc;
     IMAX = 5;
-    DUR = 0.6*constants.fs;
+    DUR = noteStruct.duration;
     
     F1 = envelopeGEN_ADSR((3/17)*DUR, (2.5/17)*DUR, (3/17)*DUR, 10, 7.5, DUR);
     F2 = envelopeGEN_ADSR((3/17)*DUR, (2.5/17)*DUR, (3/17)*DUR, fm*IMAX, .75*fm*IMAX, DUR);
