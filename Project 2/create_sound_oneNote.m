@@ -40,16 +40,17 @@ elseif instrument.sound == "Subtractive"
 
     mainOsc = oscillator('square', 7, FREQ, 0, DUR, constants);
     
-    filter = dsp.VariableBandwidthFIRFilter(...
+    filter = dsp.VariableBandwidthIIRFilter(...
         'FilterType', 'lowpass',...
-        'FilterOrder', 100,...
+        'FilterOrder', 48,...
         'SampleRate', constants.fs,...
-        'CutoffFrequency', 2500);
+        'PassbandFrequency', 200);
 
-    for counter = 1:400:length(soundVector)
-        newWave = filter(mainOsc(counter:counter+399)).*ENV(counter:counter+399);
-        soundVector(counter:counter+399) = newWave;
-        filter.CutoffFrequency = filter.CutoffFrequency - 5;
+    for counter = 1:length(soundVector)/400:length(soundVector)
+        index = length(soundVector)/400;
+        newWave = filter(mainOsc(counter:counter+index-1)).*ENV(counter:counter+index-1);
+        soundVector(counter:counter+index-1) = newWave;
+        filter.PassbandFrequency = filter.PassbandFrequency - .2;
     end
     
  %% Frequency Modulation - Brasslike Timbre
