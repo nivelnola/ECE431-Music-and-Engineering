@@ -53,12 +53,12 @@ elseif instrument.sound == "Subtractive"
         filter.PassbandFrequency = filter.PassbandFrequency - .2;
     end
     
- %% Frequency Modulation - Brasslike Timbre
+ %% Frequency Modulation - Brasslike Timbre (Jerse, 5.9d)
 elseif instrument.sound == "FM"
     fc = note2freq(noteStruct.note);
     fm = fc;
     IMAX = 5;
-    DUR = noteStruct.duration;
+    DUR = 0.6;
     
     F1 = envelopeGEN_ADSR((3/17)*DUR, (2.5/17)*DUR, (3/17)*DUR, 10, 7.5, DUR);
     F2 = envelopeGEN_ADSR((3/17)*DUR, (2.5/17)*DUR, (3/17)*DUR, fm*IMAX, .75*fm*IMAX, DUR);
@@ -66,9 +66,23 @@ elseif instrument.sound == "FM"
     freqMod = oscillator('sine', F2, fm, 0, DUR, constants);
     soundVector = oscillator('sine', F1, fc+freqMod, 0, DUR, constants);
     
-%% Wave Shaping
+%% Wave Shaping - Drum (Jerse, 5.31)
 elseif instrument.sound == "Waveshaper"
+    DUR = 0.2*constants.fs;
+    FREQ = note2freq(noteStruct.note);
+    AMP = 10;
     
+    F1 = [linspace(1, 0, (constants.fs)*.04), zeros(1, constants.fs*(.2-.04))];
+    % Approximation of F2
+    F2 = AMP*[linspace(0, 1, (constants.fs)*.02), linspace(1, .5, constants.fs*.05), linspace(.5, 0, constants.fs*.13)];
+    
+    osc1 = oscillator('sine', F2, FREQ, 0, DUR, constants);
+    osc2 = oscillator('sine', F1, FREQ*.7071, 0, DUR, constants);
+    
+    shapeWave = @(x) 1 +.841*x -.707*x.^2 -.595*x.^3 +.5*x.^4 +.42*x.^5 ...
+        -.354*x.^6 -.297*x.^7 +.25*x.^8 +.210*x.^9;
+    
+    soundVector = osc1.*(shapeWave(osc2));
     
 %% Else
 else
