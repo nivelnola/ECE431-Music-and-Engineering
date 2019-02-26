@@ -57,13 +57,13 @@ for cntSynth=1:length(synthTypes)
     fprintf(STDOUT,'Playing the Sample Note');
     soundsc(soundSample,constants.fs);
     fprintf('\n');
+    pause(5);
     
 end % for cntSynth;
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Question 5  - chords
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Question 5  - chords
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 for cntSynth=1:length(synthTypes)
     % major chords
     instrument.mode = 'Major';
@@ -84,10 +84,13 @@ for cntSynth=1:length(synthTypes)
     
     disp('Playing the Just Tempered Major Chord');
     soundsc(soundMajorChordJust,constants.fs);
+    pause(5)
     disp('Playing the Equal Tempered Major Chord');
     soundsc(soundMajorChordEqual,constants.fs);
+    pause(5)
     disp('Playing the Just Tempered Minor Chord');
     soundsc(soundMinorChordJust,constants.fs);
+    pause(5)
     disp('Playing the Equal Tempered Minor Chord');
     soundsc(soundMinorChordEqual,constants.fs);
     fprintf('\n');
