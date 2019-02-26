@@ -26,13 +26,14 @@ if instrument.sound == "Additive"
     
     soundVector = sum(sinMatrix);
     
-%% Subtractive Synthesis - Square Wave
+%% Subtractive Synthesis - Square Wave w/ Closing Filter Amplitude Modulation
 elseif instrument.sound == "Subtractive"
     DUR = noteStruct.duration;
     FREQ = note2freq(noteStruct.note);
+    ENV = envelopeGEN_ASD(.2*DUR,10,DUR,.10*DUR);
 
-    mainOsc = oscillator('square', 10, FREQ, 0, DUR, constants);
-
+    mainOsc = oscillator('square', 7, FREQ, 0, DUR, constants);
+    
     filter = dsp.VariableBandwidthFIRFilter(...
         'FilterType', 'lowpass',...
         'FilterOrder', 100,...
@@ -40,13 +41,17 @@ elseif instrument.sound == "Subtractive"
         'CutoffFrequency', 2500);
 
     for counter = 1:400:length(soundVector)
-        newWave = filter(mainOsc(counter:counter+399));
+        newWave = filter(mainOsc(counter:counter+399)).*ENV(counter:counter+399);
         soundVector(counter:counter+399) = newWave;
         filter.CutoffFrequency = filter.CutoffFrequency - 5;
     end
+    
+ %% Frequency Modulation
 end
 
 %% Output
+figure
+plot(soundVector);
 
 end
 
