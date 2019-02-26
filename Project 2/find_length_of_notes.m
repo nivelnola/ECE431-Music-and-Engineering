@@ -5,7 +5,6 @@ function [totalLength] = find_length_of_notes(notes)
 totalLength = 0;
 for ticker = 1:length(notes)
     totalLength = max(totalLength, notes{ticker}.start + notes{ticker}.duration);
-    disp(totalLength);
 end
 
 end
