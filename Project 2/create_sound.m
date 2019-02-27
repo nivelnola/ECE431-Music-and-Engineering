@@ -17,7 +17,28 @@ if instrument.sound == "Additive"
         noteStruct = notes{noter};
         
         DUR = noteStruct.duration;
-        FREQ = note2freq(noteStruct.note);
+        
+        if instrument.temperament == "Just" && ~(noter == 1)
+            switch instrument.mode
+                case "Major"
+                    switch noter
+                        case 2
+                            FREQ = note2freq(notes{1}.note)*9/8;
+                        case 3
+                            FREQ = note2freq(notes{1}.note)*3/2;
+                    end
+                case "Minor"
+                    switch noter
+                        case 2
+                            FREQ = note2freq(notes{1}.note)*6/5;
+                        case 3
+                            FREQ = note2freq(notes{1}.note)*3/2;
+                    end
+            end
+        else
+            FREQ = note2freq(noteStruct.note);
+        end
+        
         sinMatrix = zeros(11,DUR);
 
         for counter = 1:11
@@ -44,7 +65,27 @@ elseif instrument.sound == "Subtractive"
         noteStruct = notes{noter};
         
         DUR = noteStruct.duration;
-        FREQ = note2freq(noteStruct.note);
+        if instrument.temperament == "Just" && ~(noter == 1)
+            switch instrument.mode
+                case "Major"
+                    switch noter
+                        case 2
+                            FREQ = note2freq(notes{1}.note)*9/8;
+                        case 3
+                            FREQ = note2freq(notes{1}.note)*3/2;
+                    end
+                case "Minor"
+                    switch noter
+                        case 2
+                            FREQ = note2freq(notes{1}.note)*6/5;
+                        case 3
+                            FREQ = note2freq(notes{1}.note)*3/2;
+                    end
+            end
+        else
+            FREQ = note2freq(noteStruct.note);
+        end
+        
         ENV = envelopeGEN_ASD(.2*DUR,10,DUR,.10*DUR);
 
         mainOsc = oscillator('square', 7, FREQ, 0, DUR, constants);
@@ -69,7 +110,27 @@ elseif instrument.sound == "FM"
     for noter = 1:length(notes)
         noteStruct = notes{noter};
         
-        fc = note2freq(noteStruct.note);
+        if instrument.temperament == "Just" && ~(noter == 1)
+            switch instrument.mode
+                case "Major"
+                    switch noter
+                        case 2
+                            fc = note2freq(notes{1}.note)*9/8;
+                        case 3
+                            fc = note2freq(notes{1}.note)*3/2;
+                    end
+                case "Minor"
+                    switch noter
+                        case 2
+                            fc = note2freq(notes{1}.note)*6/5;
+                        case 3
+                            fc = note2freq(notes{1}.note)*3/2;
+                    end
+            end
+        else
+            fc = note2freq(noteStruct.note);
+        end
+        
         fm = fc;
         IMAX = 5;
         DUR = 0.6*constants.fs;
@@ -89,7 +150,26 @@ elseif instrument.sound == "Waveshaper"
         noteStruct = notes{noter};
     
         DUR = 0.2*constants.fs;
-        FREQ = note2freq(noteStruct.note);
+        if instrument.temperament == "Just" && ~(noter == 1)
+            switch instrument.mode
+                case "Major"
+                    switch noter
+                        case 2
+                            FREQ = note2freq(notes{1}.note)*9/8;
+                        case 3
+                            FREQ = note2freq(notes{1}.note)*3/2;
+                    end
+                case "Minor"
+                    switch noter
+                        case 2
+                            FREQ = note2freq(notes{1}.note)*6/5;
+                        case 3
+                            FREQ = note2freq(notes{1}.note)*3/2;
+                    end
+            end
+        else
+            FREQ = note2freq(noteStruct.note);
+        end
         AMP = 10;
 
         soundVector = zeros(length(notes),DUR);
