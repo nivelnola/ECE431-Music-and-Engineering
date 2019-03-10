@@ -16,7 +16,7 @@ if instrument.sound == "Additive"
     for noter = 1:length(notes)
         noteStruct = notes{noter};
         
-        DUR = noteStruct.duration;
+        DUR = 10*noteStruct.duration;
         
         if instrument.temperament == "Just" && ~(noter == 1)
             switch instrument.mode
@@ -56,7 +56,7 @@ if instrument.sound == "Additive"
             end
         end
         
-        soundVector(noter, (noteStruct.start + (1:noteStruct.duration))) = sum(sinMatrix);
+        soundVector(noter, (noteStruct.start + (1:10*noteStruct.duration))) = sum(sinMatrix);
     end
     
 %% Subtractive Synthesis - Square Wave w/ Closing Filter Amplitude Modulation
