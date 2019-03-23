@@ -26,60 +26,99 @@ eventsTicker = 1;   % ticker that goes through the new events vector
 
 while streamTicker <= length(trackBytes)
     % Identify the current delta-time
-    deltaBytes = [];
-    while trackBytes(streamTicker) >= 128            %% TEST THIS
-        deltaBytes = [deltaBytes; trackBytes(streamTicker)];
+    startByte = streamTicker;
+    while trackBytes(streamTicker) >= 128
         streamTicker = streamTicker + 1;
     end
-    deltaBytes = [deltaBytes; trackBytes(streamTicker)];
-    streamTicker = streamTicker + 1;
+    deltaBytes = trackBytes(startByte:streamTicker);
     
-    % Convert the deltaTime from VLQ to decimal
+    % Convert the deltaTime from VLQ to decimal and store it
     deltaTime = varlen2dec(deltaBytes);
     trackEvents(eventsTicker, 1) = deltaTime;
     
+    % Go to the message definition
+    streamTicker = streamTicker + 1;
+    
     %% There are three types of events we have to look out for, with different formats
-    % Sysex (240 || 247)
-    if trackBytes(streamTicker) == 240 || trackBytes(streamTicker) == 247
-        eventStart = streamTicker;
-        % Increment to start checking length of event
-        streamTicker = streamTicker + 1;
-        mesLenBytes = [];
-        while trackBytes(streamTicker) >= 128            %% TEST THIS
-            mesLenBytes = [mesLenBytes; trackBytes(streamTicker)];
-            streamTicker = streamTicker + 1;
-        end
-        mesLenBytes = [mesLenBytes; trackBytes(streamTicker)]
-        streamTicker = streamTicker + 1;
-        mesLen = varlen2dec(mesLenBytes);
-        
-        totalLen = (streamTicker+mesLen) - eventStart;        
-        trackEvents(eventsTicker:eventsTicker+totalLen-1, 2) = trackBytes(eventStart:streamTicker+mesLen-1);
-
-        eventsTicker = eventsTicker + mesLen;
-        streamTicker = streamTicker + mesLen;
-        
-    % Meta Event (255)
-    elseif  trackBytes(streamTicker) == 255
+    % Meta Event (255) (FF <type=1byte> <length> <data>)
+    if  trackBytes(streamTicker) == 255
         eventStart = streamTicker;
         
         % Increment to start checking length of event
         streamTicker = streamTicker + 2;
-        mesLenBytes = [];
-        while trackBytes(streamTicker) >= 128            %% TEST THIS
-            mesLenBytes = [mesLenBytes; trackBytes(streamTicker)];
+        
+        % Find the event length
+        startLenByte = streamTicker;
+        while trackBytes(streamTicker) >= 128
             streamTicker = streamTicker + 1;
         end
-        mesLenBytes = [mesLenBytes; trackBytes(streamTicker)];
-        streamTicker = streamTicker + 1;
+        mesLenBytes = trackBytes(startLenByte:streamTicker);
         mesLen = varlen2dec(mesLenBytes);
         
-        totalLen = (streamTicker+mesLen) - eventStart
+        % Find total event length
+        streamTicker = streamTicker + 1;
+        totalLen = (streamTicker+mesLen) - eventStart;
+        
+        % Copy over the event, add the NaN timestamps
         trackEvents(eventsTicker:eventsTicker+totalLen-1, 2) = trackBytes(eventStart:streamTicker+mesLen-1);
         trackEvents(eventsTicker+1:eventsTicker+totalLen-1, 1) = NaN(totalLen-1,1);
         
-        eventsTicker = eventsTicker + totalLen
-        streamTicker = streamTicker + mesLen
+        % Move to the next delta-time
+        eventsTicker = eventsTicker + totalLen;
+        streamTicker = streamTicker + mesLen;
+    
+    % Sysex (240 || 247) (F0 <length> <sysex_data> || F7 <length> <any_data>)
+    elseif trackBytes(streamTicker) == 240 || trackBytes(streamTicker) == 247
+        eventStart = streamTicker;
+        
+        % Increment to start checking length of event
+        streamTicker = streamTicker + 1;
+        
+        % Find the event length
+        startLenByte = streamTicker;
+        while trackBytes(streamTicker) >= 128
+            streamTicker = streamTicker + 1;
+        end
+        mesLenBytes = trackBytes(startLenByte:streamTicker);
+        mesLen = varlen2dec(mesLenBytes);
+        
+        % Find total event length
+        streamTicker = streamTicker + 1;
+        totalLen = (streamTicker+mesLen) - eventStart;
+        
+        % Copy over the event, add the NaN timestamps
+        trackEvents(eventsTicker:eventsTicker+totalLen-1, 2) = trackBytes(eventStart:streamTicker+mesLen-1);
+        trackEvents(eventsTicker+1:eventsTicker+totalLen-1, 1) = NaN(totalLen-1,1);
+        
+        % Move to the next delta-time
+        eventsTicker = eventsTicker + totalLen;
+        streamTicker = streamTicker + mesLen;
+
+    % MIDI Channel Voice Messages - 8n-En
+    else
+        switch true
+            % 8n kk vv
+            case ismember(trackBytes(streamTicker), 128:143)
+                
+            % 9n kk vv
+            case ismember(trackBytes(streamTicker), 144:159)
+                
+            % An kk ww
+            case ismember(trackBytes(streamTicker), 128:143)
+                
+            % Bn cc nn
+            case ismember(trackBytes(streamTicker), 128:143)
+                
+            % Cn pp
+            case ismember(trackBytes(streamTicker), 128:143)
+                
+            % Dn ww
+            case ismember(trackBytes(streamTicker), 128:143)
+                
+            % En lsb msb
+            case ismember(trackBytes(streamTicker), 128:143)
+                
+        end
     end
     
 end
