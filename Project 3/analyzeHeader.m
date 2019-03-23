@@ -9,7 +9,6 @@ headerStruct.ntrks = bytes2dec(headerBytes(3:4));
 
 %% Define the delta-time, based on the <division> word (headerBytes(5:6))
 division = de2bi(headerBytes(5:6),8,'left-msb');
-disp(division)
 
 % Bit 15 (MSB) represents how to interpret the delta-times
 headerStruct.timeMode = division(1,1);
