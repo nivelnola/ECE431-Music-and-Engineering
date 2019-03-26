@@ -74,7 +74,7 @@ while streamTicker <= length(trackBytes)
         streamTicker = streamTicker + mesLen;
     
     % Sysex (240 || 247) (F0 <length> <sysex_data> || F7 <length> <any_data>)
-    elseif trackBytes(streamTicker) == 240 || trackBytes(streamTicker) == 247
+    elseif ismember(trackBytes(streamTicker), [240, 247])
         eventStart = streamTicker;
         
         % Turn Running Status off

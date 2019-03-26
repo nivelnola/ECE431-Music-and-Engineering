@@ -5,7 +5,7 @@ function soundVector = create_sound_oneNote(instrument, note, constants)
 soundVector = zeros(1,note.duration);
 noteStruct = note;
 
-%% Additive Synthesis - Bell (Jerse, 4.28)
+%% Additive Synthesis - Bell (Jerse, 4.28)w
 if instrument.sound == "Additive"
     A = [1 .67 1 1.8 2.67 1.67 1.46 1.33 1.33 1 1.33]';
     D = [1 .9 .65 .55 .325 .35 .25 .2 .15 .1 .075]';
