@@ -30,7 +30,7 @@ tmp=playAudio(majorScaleJust,oscParams,constants);
 
 majorScaleEqual=objScale('major',60,'equal','C',120);
 playAudio(majorScaleEqual,oscParams,constants);
-pl
+
 minorScaleJust=objScale('minor',60,'just','C',120);
 playAudio(minorScaleJust,oscParams,constants);
 

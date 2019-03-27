@@ -58,7 +58,13 @@ classdef objOsc < matlab.System
                 if all (mask == 0)
                     audio = zeros(1,obj.constants.BufferSize).';
                 else
-                    audio=obj.note.amplitude.*mask(:).*sin(2*pi*obj.note.frequency*timeVec);
+                    switch obj.note.instrument
+                        case 2      % Sine - default
+                            audio=obj.note.amplitude.*mask(:).*sin(2*pi*obj.note.frequency*timeVec);
+                        case 1      % A more-or-less brassy sound
+                            modulator = .5*sin(2*pi*obj.note.frequency*.25*timeVec)/2;
+                            audio=obj.note.amplitude*mask(:).*sin(2*pi*(obj.note.frequency + modulator).*timeVec);
+                    end
                 end
             end
             obj.currentTime=obj.currentTime+(obj.constants.BufferSize/obj.constants.SamplingRate);      % Advance the internal time
