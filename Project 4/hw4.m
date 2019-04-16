@@ -14,7 +14,6 @@
 %% Setup
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all
-clear functions
 clear variables
 dbstop if error
 
@@ -28,18 +27,18 @@ STDERR=2;                               % Define the standard error stream
 %% Sound Samples
 % claims to be guitar
 % source: http://www.traditionalmusic.co.uk/scales/musical-scales.htm
-[guitarSound, fsg] = wavread('guitar_C_major.wav');
+[guitarSound, fsg] = audioread('guitar_C_major.wav');
 
 % sax riff - should be good for compressor
 % source: http://www.freesound.org/people/simondsouza/sounds/763
-[saxSound, fss] = wavread('sax_riff.wav');
+[saxSound, fss] = audioread('sax_riff.wav');
 
 % a fairly clean guitar riff
 % http://www.freesound.org/people/ERH/sounds/69949/
-[cleanGuitarSound, fsag] = wavread('guitar_riff_acoustic.wav');
+[cleanGuitarSound, fsag] = audioread('guitar_riff_acoustic.wav');
 
 % Harmony central drums (just use the first half)
-[drumSound, fsd] = wavread('drums.wav');
+[drumSound, fsd] = audioread('drums.wav');
 L = size(drumSound,1);
 drumSound = drumSound(1:round(L/2), :);
 
@@ -63,7 +62,7 @@ soundsc(saxSound,constants.fs)
 disp('Playing the Compressor input')
 soundsc(output,constants.fs)
 disp('Playing the Compressor Output');
-wavwrite(output,fss,'output_compressor.wav');
+audiowrite(output,fss,'output_compressor.wav');
 
 % PLOTS for Question 1d
 
@@ -84,7 +83,7 @@ soundsc(guitarSound,constants.fs)
 disp('Playing the RingMod input')
 soundsc(output,constants.fs)
 disp('Playing the RingMod Output');
-wavwrite(output,fsg,'output_ringmod.wav');
+audiowrite(output,fsg,'output_ringmod.wav');
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -102,7 +101,7 @@ soundsc(guitarSound,constants.fs)
 disp('Playing the Tremolo input')
 soundsc(output,constants.fs)
 disp('Playing the Tremolo Output');
-wavwrite(output,fsg,'output_tremelo.wav');
+audiowrite(output,fsg,'output_tremelo.wav');
 
 
 
@@ -118,7 +117,7 @@ soundsc(inSound,constants.fs)
 disp('Playing the Distortion input')
 soundsc(output,constants.fs)
 disp('Playing the Distortion Output');
-wavwrite(output,fsag,'output_distortion.wav');
+audiowrite(output,fsag,'output_distortion.wav');
 
 % look at what distortion does to the spectrum
 L = 10000;
@@ -143,7 +142,7 @@ soundsc(inSound,constants.fs)
 disp('Playing the Slapback input')
 soundsc(output,constants.fs)
 disp('Playing the Slapback Output');
-wavwrite(output,fsag,'output_slapback.wav');
+audiowrite(output,fsag,'output_slapback.wav');
 
 
 % cavern echo settings
@@ -157,7 +156,7 @@ soundsc(inSound,constants.fs)
 disp('Playing the cavern input')
 soundsc(output,constants.fs)
 disp('Playing the cavern Output');
-wavwrite(output,fsh,'output_cave.wav');
+audiowrite(output,fsh,'output_cave.wav');
 
 
 % delay (to the beat) settings
@@ -171,7 +170,7 @@ soundsc(inSound,constants.fs)
 disp('Playing the delayed on the beat input')
 soundsc(output,constants.fs)
 disp('Playing the delayed on the beat Output');
-wavwrite(output,fsg,'output_beatdelay.wav');
+audiowrite(output,fsg,'output_beatdelay.wav');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Question 6 - Flanger
@@ -188,7 +187,7 @@ soundsc(inSound,constants.fs)
 disp('Playing the Flanger input')
 soundsc(output,constants.fs)
 disp('Playing the Flanger Output');
-wavwrite(output,fsd,'output_flanger.wav');
+audiowrite(output,fsd,'output_flanger.wav');
 
 
 
@@ -207,6 +206,6 @@ soundsc(inSound,constants.fs)
 disp('Playing the Chorus input')
 soundsc(output,constants.fs)
 disp('Playing the Chorus Output');
-wavwrite(output,fsg,'output_chorus.wav');
+audiowrite(output,fsg,'output_chorus.wav');
 
 
