@@ -37,7 +37,7 @@ for ticker = 1:lenSound
         gain(startBin:ticker) = gain(startBin:ticker) * 1;
     else
         currGain = max(0, 1 - slope*(currPower - threshold));
-        gain(startBin:ticker) = currGain * gain(startBin:ticker);
+        gain(startBin:ticker+attack*constants.fs) = currGain * gain(startBin:ticker+attack*constants.fs);
     end
 end
 

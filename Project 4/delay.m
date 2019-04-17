@@ -8,7 +8,7 @@ assert(delay_time < 8 && delay_time > 100e-6, 'ERROR: Delay time must be between
 
 % Setup
 lenSound = length(inSound);
-delayBins = delay_time * constants.fs;
+delayBins = floor(delay_time * constants.fs);
 
 % Allocate additional pad-room at end of clip
 paddedSound = [inSound; zeros(delayBins,1)];

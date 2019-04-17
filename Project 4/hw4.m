@@ -15,6 +15,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all
 clear variables
+clc
 dbstop if error
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -55,18 +56,33 @@ LFO_rate=0.5;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 threshold = 0.1; 
 attack = 0.2;
+slope = 0.4;
 avg_len = 5000;
-[output,gain]=compressor(constants,saxSound,threshold,slope,avg_len);
+[output,gain]=compressor(constants,saxSound,threshold,slope,attack,avg_len);
 
-soundsc(saxSound,constants.fs)
+player = audioplayer(saxSound,constants.fs);
 disp('Playing the Compressor input')
-soundsc(output,constants.fs)
+playblocking(player);
+player = audioplayer(output,constants.fs);
 disp('Playing the Compressor Output');
-audiowrite(output,fss,'output_compressor.wav');
+playblocking(player);
+audiowrite('output_compressor.wav',output,fss);
 
-% PLOTS for Question 1d
+figure('Name', 'Compressor Behavior')
+subplot(2,1,1)
+hold on
+plot(saxSound, 'r')
+plot(output, 'b')
+title('Compressor Input and Output')
+xlabel('Time');
+ylabel('Magnitude')
+legend('Input', 'Output')
 
-% TODO: Add code to complete plots
+subplot(2,1,2)
+plot(gain)
+title('Signal Gain vs Time')
+xlabel('Time');
+ylabel('Gain');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Question 2 - Ring Modulator
@@ -79,11 +95,13 @@ inputFreq = 2500;
 depth = 0.5;
 [output]=ringmod(constants,guitarSound,inputFreq,depth);
 
-soundsc(guitarSound,constants.fs)
+player = audioplayer(guitarSound,constants.fs);
 disp('Playing the RingMod input')
-soundsc(output,constants.fs)
+playblocking(player);
+player = audioplayer(output,constants.fs);
 disp('Playing the RingMod Output');
-audiowrite(output,fsg,'output_ringmod.wav');
+playblocking(player); 
+audiowrite('output_ringmod.wav',output,fsg);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -97,11 +115,13 @@ lag = constants.fs/4;
 depth = 0.9;
 [output]=tremolo(constants,guitarSound,LFO_type,LFO_rate,lag,depth);
 
-soundsc(guitarSound,constants.fs)
+player = audioplayer(guitarSound,constants.fs);
 disp('Playing the Tremolo input')
-soundsc(output,constants.fs)
+playblocking(player); 
+player = audioplayer(output,constants.fs);
 disp('Playing the Tremolo Output');
-audiowrite(output,fsg,'output_tremelo.wav');
+playblocking(player); 
+audiowrite('output_tremelo.wav',output,fsg);
 
 
 
@@ -110,22 +130,44 @@ audiowrite(output,fsg,'output_tremelo.wav');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 gain = 20;
 inSound = cleanGuitarSound(:,1);
-tone = 0.5;
+tone = 0.75;
 [output]=distortion(constants,inSound,gain,tone);
 
-soundsc(inSound,constants.fs)
+player = audioplayer(inSound,constants.fs);
 disp('Playing the Distortion input')
-soundsc(output,constants.fs)
+playblocking(player); 
+player = audioplayer(output,constants.fs);
 disp('Playing the Distortion Output');
-audiowrite(output,fsag,'output_distortion.wav');
+playblocking(player);
+audiowrite('output_distortion.wav',output,fsag);
+
+figure('Name', 'Distortion Behavior')
+hold on
+plot(inSound, 'r')
+plot(output, 'b')
+title('Distortion Input and Output')
+xlabel('Time');
+ylabel('Magnitude')
+legend('Input', 'Output')
+
 
 % look at what distortion does to the spectrum
 L = 10000;
 n = 1:L;
-sinSound = sin(2*pi*440*(n/fsag));
+sinSound = sin(2*pi*440*(n/fsag)).';
 [output]=distortion(constants,sinSound,gain,tone);
 
-% TODO: Add some Sample code to demonstrate the spectrum 
+figure('Name', 'Distortion Spectrogram')
+spectrogram(output, 'yaxis');
+
+% Discussion:
+% For my distortion algorithm, I added gain to the signal, clipped it at
+% +-2, and then applied a passband butterworth filter about the tone to
+% focus the spectrum on one end or the other. The parameters were chosen
+% semi-randomly; after a bit of trial and error, I found a sound that
+% sounded nice to me, and this is the one heard here. The spectrogram shows
+% that many odd harmonics are present in the output signal, with less
+% harmonic representation in the even harmonies. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Question 5 - Delay
@@ -138,39 +180,47 @@ depth = 0.8;
 feedback = 0;
 [output]=delay(constants,inSound,depth,delay_time,feedback);
 
-soundsc(inSound,constants.fs)
+player = audioplayer(inSound,constants.fs);
 disp('Playing the Slapback input')
-soundsc(output,constants.fs)
+playblocking(player); 
+player = audioplayer(output,constants.fs);
 disp('Playing the Slapback Output');
-audiowrite(output,fsag,'output_slapback.wav');
+playblocking(player); 
+audiowrite('output_slapback.wav',output,fsag);
 
 
 % cavern echo settings
-inSound = guitarSound;
-delay_time = 0.4;
+load('handel.mat');
+inSound = y;
+handel.fs = Fs;
+delay_time = 0.3;
 depth = 0.8;
-feedback = 0.7;
-[output]=delay(constants,inSound,depth,delay_time,feedback);
+feedback = 0.5;
+[output]=delay(handel,inSound,depth,delay_time,feedback);
 
-soundsc(inSound,constants.fs)
+player = audioplayer(inSound,handel.fs);
 disp('Playing the cavern input')
-soundsc(output,constants.fs)
+playblocking(player); 
+player = audioplayer(output,handel.fs);
 disp('Playing the cavern Output');
-audiowrite(output,fsh,'output_cave.wav');
+playblocking(player); 
+audiowrite('output_cave.wav',output,handel.fs);
 
 
 % delay (to the beat) settings
-inSound = guitarSound;
+inSound = guitarSound(:,1);
 delay_time = 0.18;
 depth = 1;
-feedback = 1;
+feedback = .75;
 [output]=delay(constants,inSound,depth,delay_time,feedback);
 
-soundsc(inSound,constants.fs)
+player = audioplayer(inSound,constants.fs);
 disp('Playing the delayed on the beat input')
-soundsc(output,constants.fs)
+playblocking(player); 
+player = audioplayer(output,constants.fs);
 disp('Playing the delayed on the beat Output');
-audiowrite(output,fsg,'output_beatdelay.wav');
+playblocking(player); 
+audiowrite('output_beatdelay.wav',output,fsg);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Question 6 - Flanger
@@ -184,11 +234,13 @@ LFO_Rate = 0.5;
 LFO_type = 'sin';
 [output]=flanger(constants,inSound,depth,delay,width,LFO_Rate,LFO_type);
 
-soundsc(inSound,constants.fs)
+player = audioplayer(inSound,constants.fs);
 disp('Playing the Flanger input')
-soundsc(output,constants.fs)
+playblocking(player); 
+player = audioplayer(output,constants.fs);
 disp('Playing the Flanger Output');
-audiowrite(output,fsd,'output_flanger.wav');
+playblocking(player); 
+audiowrite('output_flanger.wav',output,fsd);
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -197,15 +249,21 @@ audiowrite(output,fsd,'output_flanger.wav');
 inSound = guitarSound(:,1);
 constants.fs = fsg;
 depth = 0.9;
-delay = .03;   
-width = 0.1;   
+delay = .009;   
+width = 0.01;   
 LFO_Rate = 0.5; % irrelevant if width = 0
-[output]=flanger(constants,inSound,depth,delay,width,LFO_Rate);
+LFO_type = 'sin';
+% Either a sine wave or a triangle wave can be chosen; I found the sine
+% wave to sound nicer, personally.
 
-soundsc(inSound,constants.fs)
+[output]=flanger(constants,inSound,depth,delay,width,LFO_Rate,LFO_type);
+
+player = audioplayer(inSound,constants.fs);
 disp('Playing the Chorus input')
-soundsc(output,constants.fs)
+playblocking(player); 
+player = audioplayer(output,constants.fs);
 disp('Playing the Chorus Output');
-audiowrite(output,fsg,'output_chorus.wav');
+playblocking(player); 
+audiowrite('output_chorus.wav',output,fsg);
 
 
