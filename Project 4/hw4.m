@@ -2,7 +2,7 @@
 % SCRIPT
 %    hw4
 %
-% NAME: _________________
+% NAME: Alon S. Levin
 %
 % This script runs questions 1 through 7 of the HW4 from ECE313:Music and
 % Engineering.
@@ -69,7 +69,7 @@ audiowrite(output,fss,'output_compressor.wav');
 % TODO: Add code to complete plots
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Question 2 - Ring Modulator
+%% Question 2 - Ring Modulator
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 constants.fs = fsg;
 % the input frequency is fairly arbitrary, but should be about an order of
@@ -87,7 +87,7 @@ audiowrite(output,fsg,'output_ringmod.wav');
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Question 3 - Stereo Tremolo
+%% Question 3 - Stereo Tremolo
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 LFO_type = 'sin';
 LFO_rate = 5;
@@ -128,11 +128,11 @@ sinSound = sin(2*pi*440*(n/fsag));
 % TODO: Add some Sample code to demonstrate the spectrum 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Question 5 - Delay
+%% Question 5 - Delay
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % slapback settings
-inSound = cleanGuitarSound(:,1);
+inSound = saxSound(:,1);
 delay_time = 0.08; % in seconds
 depth = 0.8;
 feedback = 0;
@@ -173,15 +173,16 @@ disp('Playing the delayed on the beat Output');
 audiowrite(output,fsg,'output_beatdelay.wav');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Question 6 - Flanger
+%% Question 6 - Flanger
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 inSound = drumSound;
 constants.fs = fsd;
 depth = 0.8;
 delay = .001;   
 width = .002;   
-LFO_Rate = 0.5;   
-[output]=flanger(constants,inSound,depth,delay,width,LFO_Rate);
+LFO_Rate = 0.5;
+LFO_type = 'sin';
+[output]=flanger(constants,inSound,depth,delay,width,LFO_Rate,LFO_type);
 
 soundsc(inSound,constants.fs)
 disp('Playing the Flanger input')
@@ -190,9 +191,8 @@ disp('Playing the Flanger Output');
 audiowrite(output,fsd,'output_flanger.wav');
 
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Question 7 - Chorus
+%% Question 7 - Chorus
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 inSound = guitarSound(:,1);
 constants.fs = fsg;
