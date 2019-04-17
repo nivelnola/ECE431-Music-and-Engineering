@@ -2,9 +2,7 @@ function [output] = ringmod(constants,inSound,inputFreq,depth)
 %RINGMOD applies ring modulator effect to inSound
 
 % Ensure that depth is within range
-if depth > 1 || depth < 0
-    error('ERROR: Depth must be between 0.');
-end
+assert(depth <= 1 && depth >= 0, 'ERROR: Depth must be between 0 and 1.');
 
 % Derive the ringing signal
 lenSound = length(inSound);

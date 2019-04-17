@@ -7,9 +7,10 @@ function [output] = tremolo(constants,inSound,LFO_type,LFO_rate,lag,depth)
 lenSound = length(inSound);
 
 % Ensure LFO_rate is within range
-if LFO_rate > 5 || LFO_rate < 0.05
-    error('ERROR: LFO rate must be between 0.05 Hz and 5 Hz.');
-end
+assert(LFO_rate < 5 && LFO_rate > 0.05, 'ERROR: LFO rate must be between 0.05 Hz and 5 Hz.');
+
+% Ensure that depth is within range
+assert(depth <= 1 && depth >= 0, 'ERROR: Depth must be between 0 and 1.');
 
 switch true
     case strcmpi(LFO_type, 'sin')
